@@ -10,8 +10,9 @@ import (
 )
 
 type CNode struct {
-	Inode uint64
-	Path  string
+	Inode  uint64
+	Path   string
+	Parent *FDir
 }
 
 func timespecToTime(ts syscall.Timespec) time.Time {

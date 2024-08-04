@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"bazil.org/fuse"
@@ -61,7 +62,18 @@ func (ff Ffile) Write(ctx context.Context, req *fuse.WriteRequest, resp *fuse.Wr
 		return err
 	}
 	resp.Size = n
-	
+
+	return nil
+}
+
+func (ff Ffile) Remove(ctx context.Context, req *fuse.RemoveRequest) error {
+	ff.Lock.Lock()
+	defer ff.Lock.Unlock()
+
+	r := req
+	r.Name = filepath.Base(ff.Path)
+
+	ff.Parent.Remove(ctx, req)
 	return nil
 }
 

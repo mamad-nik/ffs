@@ -51,8 +51,9 @@ func (fd *FDir) Mkdir(ctx context.Context, req *fuse.MkdirRequest) (fs.Node, err
 
 	dir := &FDir{
 		CNode: CNode{
-			Inode: fs.GenerateDynamicInode(fd.Inode, req.Name),
-			Path:  name,
+			Inode:  fs.GenerateDynamicInode(fd.Inode, req.Name),
+			Path:   name,
+			Parent: fd,
 		},
 		Children: &children,
 		Lock:     &sync.Mutex{},
@@ -79,8 +80,9 @@ func (fd *FDir) Create(ctx context.Context, req *fuse.CreateRequest, resp *fuse.
 	}
 	ffile := Ffile{
 		CNode: CNode{
-			Inode: fs.GenerateDynamicInode(fd.Inode, req.Name),
-			Path:  name,
+			Inode:  fs.GenerateDynamicInode(fd.Inode, req.Name),
+			Path:   name,
+			Parent: fd,
 		},
 		Data: []byte{},
 		Mode: req.Mode,
